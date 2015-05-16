@@ -52,8 +52,9 @@ func (self *UserMgmt) CreateUser(username string, password string) error {
 		return errors.New("Invalid Password")
 	}
 	hashedPass := hex.EncodeToString(converted[:])
+	t := time.Now()
 	records := []User{
-		{UserName: username, HashedPassword: hashedPass},
+		{UserName: username, HashedPassword: hashedPass, Active: true, CreatedAt: &t},
 	}
 
 	_, err = self.UserDB.Insert(records)
@@ -79,6 +80,10 @@ func (self *UserMgmt) Auth(username string, password string) error {
 	}
 	if len(results) == 0 {
 		return errors.New("Invalid username")
+	}
+	if results[0].Active == false {
+		return errors.New("User is not active")
+
 	}
 
 	hashedPass, err := hex.DecodeString(results[0].HashedPassword)
