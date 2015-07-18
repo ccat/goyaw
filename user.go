@@ -105,10 +105,10 @@ func (self *UserMgmt) Auth(username string, password string) error {
 	return nil
 }
 
-func nilFunc() {
+/*func nilFunc() {
 	var tempMysql *mysql.NullTime = nil
 	var tempPq *pq.Error = nil
 	sqlite3.Version()
 	tempMysql = tempMysql
 	tempPq = tempPq
-}
+}*/
