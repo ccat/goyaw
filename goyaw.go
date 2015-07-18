@@ -9,12 +9,10 @@ import (
 	Goji "github.com/zenazn/goji"
 	//Graceful "github.com/zenazn/goji/graceful"
 	//Web "github.com/zenazn/goji/web"
-	//"golang.org/x/crypto/bcrypt"
 	//"github.com/naoina/genmai"
 )
 
 //https://godoc.org/github.com/zenazn/goji
-//https://godoc.org/golang.org/x/crypto/bcrypt
 
 type GoyawInstance struct {
 	//Mux      *http.ServeMux
@@ -24,15 +22,11 @@ type GoyawInstance struct {
 	UserDB *UserMgmt
 }
 
-type UserDBconfig struct {
-	Type   string
-	Config string
-}
-
 func NewGoyawInstance(userDBconfig *UserDBconfig) *GoyawInstance {
 	var yawIns *GoyawInstance = new(GoyawInstance)
 	if userDBconfig != nil {
-		yawIns.UserDB = NewUserDB(userDBconfig.Type, userDBconfig.Config)
+		//yawIns.UserDB = NewUserDB(userDBconfig.Type, userDBconfig.Config)
+		yawIns.UserDB = NewUserDB(userDBconfig)
 	} else {
 		yawIns.UserDB = nil
 	}
@@ -44,6 +38,10 @@ func (self *GoyawInstance) Serve() {
 }
 
 /*
+func hello(c Web.C, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
+}
+
 https://github.com/zenazn/goji/issues/40
 
 
