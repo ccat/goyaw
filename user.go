@@ -3,9 +3,9 @@ package goyaw
 import (
 	"encoding/hex"
 	"errors"
-	"github.com/go-sql-driver/mysql"
-	"github.com/lib/pq"
-	"github.com/mattn/go-sqlite3"
+	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/naoina/genmai"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
@@ -24,16 +24,21 @@ type UserMgmt struct {
 	UserDB *genmai.DB
 }
 
-func NewUserDB(dbType string, dbConfig string) *UserMgmt {
+type UserDBconfig struct {
+	Type   string
+	Config string
+}
+
+func NewUserDB(userDBconfig *UserDBconfig) *UserMgmt {
 	var dbIns *UserMgmt = new(UserMgmt)
 	var err error
 
-	if dbType == "sqlite3" {
-		dbIns.UserDB, err = genmai.New(&genmai.SQLite3Dialect{}, dbConfig)
-	} else if dbType == "mysql" {
-		dbIns.UserDB, err = genmai.New(&genmai.MySQLDialect{}, dbConfig)
-	} else if dbType == "postgresql" {
-		dbIns.UserDB, err = genmai.New(&genmai.PostgresDialect{}, dbConfig)
+	if userDBconfig.Type == "sqlite3" {
+		dbIns.UserDB, err = genmai.New(&genmai.SQLite3Dialect{}, userDBconfig.Config)
+	} else if userDBconfig.Type == "mysql" {
+		dbIns.UserDB, err = genmai.New(&genmai.MySQLDialect{}, userDBconfig.Config)
+	} else if userDBconfig.Type == "postgresql" {
+		dbIns.UserDB, err = genmai.New(&genmai.PostgresDialect{}, userDBconfig.Config)
 	}
 	if err != nil {
 		panic(err)
